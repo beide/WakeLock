@@ -2,3 +2,5 @@ local.properties
 *~
 .~
 *.kdev4
+gen
+bin

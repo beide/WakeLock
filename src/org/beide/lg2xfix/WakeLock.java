@@ -1,6 +1,8 @@
 package org.beide.lg2xfix;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
@@ -32,6 +34,8 @@ public class WakeLock extends Activity {
 		
 		setContentView(linlay);
 		
+		c.setChecked(isMyServiceRunning());
+		
 		c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton btn, boolean checked) {
 				
@@ -44,5 +48,17 @@ public class WakeLock extends Activity {
 				}
 			}
 		});
+	}
+	
+	
+	// From http://stackoverflow.com/questions/600207
+	private boolean isMyServiceRunning() {
+		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
+			if ("org.beide.lg2xfix.WakeLockService".equals(service.service.getClassName())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

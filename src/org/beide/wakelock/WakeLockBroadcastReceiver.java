@@ -1,4 +1,4 @@
-package org.beide.lg2xfix;
+package org.beide.wakelock;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

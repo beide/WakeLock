@@ -1,4 +1,4 @@
-package org.beide.lg2xfix;
+package org.beide.wakelock;
 
 import android.app.Activity;
 import android.app.ActivityManager;

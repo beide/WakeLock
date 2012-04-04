@@ -3,40 +3,57 @@ package org.beide.lg2xfix;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
-import android.os.Bundle;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+
+
 public class WakeLock extends Activity {
 	
-	private Context context;
+	Context context;
 	
-	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		
 		super.onCreate(savedInstanceState);
 		
 		context = getApplicationContext();
 		
 		LinearLayout linlay = new LinearLayout(context);
-		linlay.setOrientation(LinearLayout.HORIZONTAL);
+		linlay.setOrientation(LinearLayout.VERTICAL);
 		
-		CheckBox c = new CheckBox(getApplicationContext());
-		linlay.addView(c);
+		LinearLayout linlayactive = new LinearLayout(context);
+		linlayactive.setOrientation(LinearLayout.HORIZONTAL);
+		linlay.addView(linlayactive);
+		
+		LinearLayout linlayonboot = new LinearLayout(context);
+		linlayonboot.setOrientation(LinearLayout.HORIZONTAL);
+		linlay.addView(linlayonboot);
+		
+		CheckBox active = new CheckBox(getApplicationContext());
+		linlayactive.addView(active);
+		CheckBox onboot = new CheckBox(getApplicationContext());
+		linlayonboot.addView(onboot);
 		
 		TextView tv = new TextView(context);
 		tv.setText("Enable wakelock");
-		linlay.addView(tv);
+		linlayactive.addView(tv);
+		
+		tv = new TextView(context);
+		tv.setText("Start on boot");
+		linlayonboot.addView(tv);
 		
 		setContentView(linlay);
 		
-		c.setChecked(isMyServiceRunning());
+		active.setChecked(isMyServiceRunning());
 		
-		c.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+		active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton btn, boolean checked) {
 				
 				Intent intent = new Intent(context, WakeLockService.class);
@@ -46,6 +63,16 @@ public class WakeLock extends Activity {
 				} else {
 					stopService(intent);
 				}
+			}
+		});
+		
+		SharedPreferences sp = getSharedPreferences("config", 0);
+		onboot.setChecked(sp.getBoolean("onboot", false));
+		
+		onboot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			public void onCheckedChanged(CompoundButton btn, boolean checked) {
+				SharedPreferences sp = getSharedPreferences("config", 0);
+				sp.edit().putBoolean("onboot", checked);
 			}
 		});
 	}

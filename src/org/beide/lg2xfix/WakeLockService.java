@@ -15,8 +15,7 @@ import android.os.PowerManager;
  * the easy way of fixing the problem, not the qualitative way.
  */
 
-public class WakeLockService extends Service
-{
+public class WakeLockService extends Service {
 	PowerManager.WakeLock wl;
 	
 	public int onStartCommand() {

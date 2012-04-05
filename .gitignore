@@ -6,3 +6,5 @@ gen
 bin
 debug.sh
 release.sh
+*.key
+*.keystore

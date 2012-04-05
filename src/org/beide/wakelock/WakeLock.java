@@ -6,6 +6,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
@@ -72,7 +73,9 @@ public class WakeLock extends Activity {
 		onboot.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			public void onCheckedChanged(CompoundButton btn, boolean checked) {
 				SharedPreferences sp = getSharedPreferences("config", 0);
-				sp.edit().putBoolean("onboot", checked);
+				SharedPreferences.Editor spe = sp.edit();
+				spe.putBoolean("onboot", checked);
+				spe.commit();
 			}
 		});
 	}
@@ -82,7 +85,7 @@ public class WakeLock extends Activity {
 	private boolean isMyServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
 		for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
-			if ("org.beide.lg2xfix.WakeLockService".equals(service.service.getClassName())) {
+			if ("org.beide.wakelock.WakeLockService".equals(service.service.getClassName())) {
 				return true;
 			}
 		}
